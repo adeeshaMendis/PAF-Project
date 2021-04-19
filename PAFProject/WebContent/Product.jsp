@@ -1,5 +1,20 @@
+<%@ page import="model.Product"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+	
+	<% 
+ //Insert item---------------------------------- 
+if (request.getParameter("productCode") != null) 
+ { 
+ Product pObj = new Product(); 
+ String stsMsg = pObj.insertProduct(request.getParameter("productCode"), 
+ request.getParameter("productName"), 
+ request.getParameter("version"), 
+ request.getParameter("productdescription"),
+ request.getParameter("productPrice")); 
+ session.setAttribute("statusMsg", stsMsg); 
+ } 
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -116,6 +131,11 @@
 		</div>
 		<p class="footer-bottom-text">All Right Reserved by Gadget Badget</p>
 	</footer>
+	
+	<%
+ Product pObj = new Product(); 
+ out.print(pObj.readItems()); 
+%>
 </body>
 
 </html>
