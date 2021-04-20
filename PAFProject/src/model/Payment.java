@@ -111,6 +111,63 @@ public class Payment {
 	
 		
 	}
+	public String readPayment(String NIC)
+	 {
+	 String output = "";
+	 try
+	 {
+	 Connection con = connect();
+	 if (con == null)
+	 {return "Error while connecting to the database for reading."; }
+	 // Prepare the html table to be displayed
+	 output = "<table border='1'><tr><th>Payment ID</th><th>NIC</th>" +
+	 "<th>Credit Number</th>" +
+	 "<th>Cvv</th>" +
+	 "<th>Expire Date</th>" +
+	 "<th>Date</th>" +
+	 "<th>Amount</th>" +
+	 "<th>Update</th><th>Remove</th></tr>";
+
+	 String query = "select * from payments where NIC = '"+NIC+"'";
+	 Statement stmt = con.createStatement();
+	 ResultSet rs = stmt.executeQuery(query);
+	 // iterate through the rows in the result set
+	 while (rs.next())
+	 {
+	 String paymentID = Integer.toString(rs.getInt("paymentID"));
+	 String UserNIC = rs.getString("NIC");
+	 String creditNumber = rs.getString("creditNumber");
+	 String cvv = rs.getString("cvv");
+	 String expireDate = rs.getString("expireDate");
+	 String date = rs.getString("date");
+	 String amount = Double.toString(rs.getDouble("amount"));
+	 
+	 // Add into the html table
+	 output += "<tr><td>" + paymentID + "</td>";
+	 output += "<td>" + UserNIC + "</td>";
+	 output += "<td>" + creditNumber + "</td>";
+	 output += "<td>" + cvv + "</td>";
+	 output += "<td>" + expireDate + "</td>";
+	 output += "<td>" + date + "</td>";
+	 output += "<td>" + amount + "</td>";
+	 // buttons
+	 output += "<td><input name='btnUpdate' type='button' value='Update' class='btn btn-secondary'></td>"
+	 + "<td><form method='post' action='payments.jsp'>"
+	 + "<input name='btnRemove' type='submit' value='Remove'class='btn btn-danger'>"
+	 + "<input name='itemID' type='hidden' value='" + paymentID
+	 + "'>" + "</form></td></tr>";
+	 }
+	 con.close();
+	 // Complete the html table
+	 output += "</table>";
+	 }
+	 catch (Exception e)
+	 {
+	 output = "Error while reading the items.";
+	 System.err.println(e.getMessage());
+	 }
+	 return output;
+	 }
 }
 	
 	 
