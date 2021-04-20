@@ -1,11 +1,26 @@
+<%@ page import="model.Product"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+	
+	<% 
+ //Insert item---------------------------------- 
+if (request.getParameter("productCode") != null) 
+ { 
+ Product pObj = new Product(); 
+ String stsMsg = pObj.insertProduct(request.getParameter("productCode"), 
+ request.getParameter("productName"), 
+ request.getParameter("version"), 
+ request.getParameter("productdescription"),
+ request.getParameter("productPrice")); 
+ session.setAttribute("statusMsg", stsMsg); 
+ } 
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Welcome To GadgetBadget</title>
 
+<title>Product Management</title>
 <link rel="stylesheet" type="text/css" href="Styles/style.css">
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -14,9 +29,10 @@
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
+
 <body>
 
-	<header>
+	<header >
 		<nav class="navbar navbar-style">
 			<div class="container">
 
@@ -33,31 +49,50 @@
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="">Review</a></li>
 						<li><a href="">Register</a></li>
-						<li><a href="">Login</a></li>
+						<li><a href="">Logout</a></li>
 					</ul>
 				</div>
 			</div>
 		</nav>
-
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-6 banner-info">
-					<h1>Sell your New Software Product</h1>
-					<p class="big-text">We are here to help you to sell your
-						softwares and make the opportunity to next step.</p>
-					<h1>Buy New Software Product</h1>
-					<p class="big-text">We are here to provide the best softwares.</p>
-					<a class="btn btn-first" href="#">SIGN UP</a> <a
-						class="btn btn-second" href="#">SIGN IN</a>
-				</div>
-				<div class="col-sm-6 banner-image">
-					<img src="images/tohome.jpg" class="img-responsive">
-				</div>
-			</div>
-		</div>
 	</header>
+<div class="container">
+ <div class="row">
+ <div class="col">
+ 
+ <h1 style="color:orange">Sell Your Product Now!!!!!!!</h1>
 
-	<footer>
+	<form class="needs-validation" novalidate>
+	
+ 
+   <div class="col-md-4 mb-3">
+      <label for="validationCustom01">Product Code</label>
+      <input type="text" class="form-control" id="validationCustom01"required>
+  
+      <label for="validationCustom01">Product Name</label>
+      <input type="text" class="form-control" id="validationCustom01"required>
+  
+ 	  <label for="validationCustom01">Product Version</label>
+      <input type="text" class="form-control" id="validationCustom01"required>
+  
+      <label for="validationCustom01">Description</label>
+      <input type="text" class="form-control" id="validationCustom01"required>
+   
+      <label for="validationCustom01">Product Amount</label>
+      <input type="text" class="form-control" id="validationCustom01"required><br><br>
+      
+      <button class="btn btn-primary" type="submit">ADD PRODUCT</button>
+  
+    </div>
+   
+   
+  
+   </form>
+     </div>
+ </div>
+</div>
+
+<br/><br/>
+    	<footer>
 		<div class="footer-top">
 			<div class="container">
 				<div class="row">
@@ -96,6 +131,8 @@
 		</div>
 		<p class="footer-bottom-text">All Right Reserved by Gadget Badget</p>
 	</footer>
-
+	
+	
 </body>
+
 </html>
