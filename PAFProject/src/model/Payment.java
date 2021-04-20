@@ -83,7 +83,7 @@ public class Payment {
 				 }else if(cvv.length() !=4) {
 					 return "cvv should be 4 digits";
 				 }else if(expireDate.compareTo(date)<0) {
-					 return "should be greater";
+					 return "Expire date should be greater than today date";
 				 }
 				 else  {
 					 // create a prepared statement
@@ -201,7 +201,10 @@ public class Payment {
 		 return "expire Date should be 'dd-MM-YYYY'";
 	 }else if(valDate(date) == false) {
 		 return "date should be 'dd-MM-yyyy'";
-	 }else {
+	 }else if(expireDate.compareTo(date)<0) {
+		 return "Expire date should be greater than today date";
+	 }
+	 else {
 	 String query = "UPDATE payments SET creditNumber=?,cvv=?,expireDate=?,date=?,amount=? WHERE NIC=?";
 	 PreparedStatement preparedStmt = con.prepareStatement(query);
 	 // binding values
