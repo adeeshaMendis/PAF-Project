@@ -23,7 +23,7 @@ public class Product {
 
 	}
 
-	public String insertProduct(String pcode, String pname, String pversion, String desc, String price) {
+	public String insertProduct(String nic,String pcode, String pname, String pversion, String desc, String price) {
 
 		String output = "";
 
@@ -33,20 +33,35 @@ public class Product {
 			if (con == null) {
 				return "Error while connecting to the database for inserting.";
 			}
-
-			String query = "INSERT INTO products(productId,productCode,productName,version,description,amount) VALUES(?,?,?,?,?,?)";
+			
+			String query = "INSERT INTO products(productId,NIC,productCode,productName,version,description,amount) VALUES(?,?,?,?,?,?,?)";
 
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 
 			preparedStmt.setInt(1, 0);
-			preparedStmt.setString(2, pcode);
-			preparedStmt.setString(3, pname);
-			preparedStmt.setString(4, pversion);
-			preparedStmt.setString(5, desc);
-			preparedStmt.setDouble(6, Double.parseDouble(price));
-
-			preparedStmt.execute();
-			con.close();
+			preparedStmt.setString(2, nic);
+			preparedStmt.setString(3, pcode);
+			preparedStmt.setString(4, pname);
+			preparedStmt.setString(5, pversion);
+			preparedStmt.setString(6, desc);
+			preparedStmt.setDouble(7, Double.parseDouble(price));
+			
+			if(nic.equals("")||pcode.equals("")||pname.equals("")||pversion.equals("")||desc.equals("")||price.equals("")) {
+				output="Please Fill the required feilds.";
+			}
+			else if(!validateNIC(nic)) {
+				output = "Please check the NIC again.";
+			}
+			else if(!validateProductCode(pcode)) {
+				output = "Please check the product code.";
+			}
+			else {
+			
+				preparedStmt.execute();
+				con.close();
+				
+			    output = "Inserted successfully"; 
+			}
 		} catch (Exception e) {
 
 			output = "Error while inserting the product.";
@@ -55,8 +70,51 @@ public class Product {
 
 		return output;
 	}
+	
+	//validations
+	
+	public static boolean validateProductCode(String pcode) {
+		int length = pcode.length();
+		if(length!=3) {
+			return false;
+		}
+		if(pcode.charAt(length-3)!= 'p') {
+			return false;
+		}
+		// Check last 2 characters are digits
+	    for (int i = 2; i > 0; i--) {
+	        char currentChar = pcode.charAt(i);
+	        if (currentChar < '0' || '9' < currentChar) {
+	            return false;
+	        }
+	    }
+		return true;
+	}
+	public static boolean validateNIC(String nic) {
+	    // Check if length is 10
+	    int length = nic.length();
+	    if (length != 10) {
+	        return false;
+	    }
+	   
+	    // Check last character for V
+	    char lastChar = nic.charAt(length - 1);
+	    if (lastChar != 'V') {
+	        return false;
+	    }
 
-	public String readItems() {
+	    // Check first 9 characters are digits
+	    for (int i = 0; i < length - 2; i++) {
+	        char currentChar = nic.charAt(i);
+	        if (currentChar < '0' || '9' < currentChar) {
+	            return false;
+	        }
+	    }
+
+	    return true;
+	}
+
+	public String readProducts(String nic) {
 		
 		String output = ""; 
 		
@@ -76,16 +134,17 @@ public class Product {
 		 		    + "<th>Product Name</th>" 
 		            +"<th>Product Version</th>"
 		            + "<th>Description</th>"
-		            + "<th>Product Price</th>"+
-		 "<th>Update</th><th>Remove</th></tr>"; 
+		            +"<th>Amount</th></tr>";
+		             
 		 
-		 String query = "select * from products"; 
+		 String query = "SELECT * FROM products WHERE NIC= '"+nic+"'"; 
 		 Statement stmt = con.createStatement(); 
 		 ResultSet rs = stmt.executeQuery(query); 
 		 // iterate through the rows in the result set
 		 while (rs.next()) 
 		 { 
 			 String productID = Integer.toString(rs.getInt("productId")); 
+			 String usernic = rs.getString("NIC");
 			 String productCode = rs.getString("productCode"); 
 			 String productName = rs.getString("productName"); 
 			 String version =rs.getString("version"); 
@@ -96,13 +155,9 @@ public class Product {
 			 output += "<td>" + productName + "</td>"; 
 			 output += "<td>" +version + "</td>"; 
 			 output += "<td>" + description + "</td>"; 
-			 output += "<td>" + price + "</td>"; 
+			 output += "<td>" + price + "</td></tr>"; 
 			 
-			 output += "<td><input name='btnUpdate' type='button' value='Update' class='btn btn-secondary'></td>"
-			 + "<td><form method='post' action='Product.jsp'>"
-			 + "<input name='btnRemove' type='submit' value='Remove' class='btn btn-danger'>"
-			 + "<input name='productID' type='hidden' value='"+productID+"'>"
-			 + "</form></td></tr>"; 
+			
 		 } 
 		 con.close(); 
 		
@@ -114,6 +169,73 @@ public class Product {
 		 System.err.println(e.getMessage()); 
 	  } 
 	  return output; 
+	}
+	
+	public String updateProduct(String productId,String pcode,String pname,String pversion,String desc,String price) {
+		
+		String output="";
+		
+		try {
+			
+			Connection con = connect();
+			
+			if(con==null) {
+				
+				return "Error while connecting to the database for updating.";
+			}
+			
+			String query = "UPDATE products SET productCode=?,productName = ?,version=?,description=?,amount=? WHERE productId='"+productId+"'";
+			
+			PreparedStatement prepStatement = con.prepareStatement(query);
+			prepStatement.setString(1, pcode);
+			prepStatement.setString(2, pname);
+			prepStatement.setString(3, pversion);
+			prepStatement.setString(4, desc);
+			prepStatement.setDouble(5, Double.parseDouble(price));
+			
+			prepStatement.execute();
+			con.close();
+			output="Updated Successfully.";
+			
+		}catch(Exception e) {
+			output="Error while updating the item.";
+			System.out.println(e.getMessage());
+			
+		}
+		
+		return output;
+		
+	}
+	
+	public String deleteProduct(String pID) {
+		String output = "";
+		
+		try {
+			
+			Connection con = connect();
+			
+			if(con==null) {
+				return "Error while connecting to the database for deleting.";
+			}
+			
+			String query = "DELETE FROM products WHERE productId = ?";
+			
+			PreparedStatement preparedStatement = con.prepareStatement(query);
+			
+			preparedStatement.setInt(1, Integer.parseInt(pID));
+			
+			preparedStatement.execute();
+			con.close();
+			
+			output="Deleted Successfully";
+			
+		}catch(Exception e ) {
+			
+			output = "Error while deleting the item.";
+			System.out.println(e.getMessage());
+		}
+		
+		return output;
 	}
 
 }

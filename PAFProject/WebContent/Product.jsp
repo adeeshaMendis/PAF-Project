@@ -132,10 +132,7 @@ if (request.getParameter("productCode") != null)
 		<p class="footer-bottom-text">All Right Reserved by Gadget Badget</p>
 	</footer>
 	
-	<%
- Product pObj = new Product(); 
- out.print(pObj.readItems()); 
-%>
+	
 </body>
 
 </html>
