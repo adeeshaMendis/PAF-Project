@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 public class Payment {
+	
 	private Connection connect()
 	 {
 	 Connection con = null;
@@ -35,6 +36,8 @@ public class Payment {
 			df.parse(date.trim());
 			
 			
+			
+			
 		}catch(Exception e) {
 			return false;
 		}
@@ -49,12 +52,13 @@ public class Payment {
 		try
 		 {
 		 Connection con = connect();
-		
+		 
 		 
 		 if (con == null)
 		 {return "Error while connecting to the database for inserting."; }
 		 else {
 			 try {
+				 
 				 
 				 Statement stmt = con.createStatement();
 				 String selectQuery = "SELECT * FROM payments WHERE creditNumber = '"+creditNumber+"'";
@@ -69,6 +73,10 @@ public class Payment {
 					 return "Expire Date should be 'dd-MM-yyyy' in format";
 				 }else if(valDate(date)== false){
 					 return "date should be 'dd-MM-yyyy' in format";
+				 }else if(creditNumber.length()!=12) {
+					 return "credit card number should be 12 digits";
+				 }else if(cvv.length() !=4) {
+					 return "cvv should be 4 digits";
 				 }
 				 else {
 					 // create a prepared statement
@@ -96,7 +104,7 @@ public class Payment {
 		 }
 		 catch (Exception e)
 		 {
-		 output = "expire date should be greater than today date";
+		 output = "error while inserting data";
 		 System.err.println(e.getMessage());
 		 }
 		return output;
