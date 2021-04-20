@@ -168,6 +168,39 @@ public class Payment {
 	 }
 	 return output;
 	 }
+	
+	public String updatePayment(String paymentID, String NIC, String creditNumber, String cvv, String expireDate,String date,String amount)
+
+	 {
+	 String output = "";
+	 try
+	 {
+	 Connection con = connect();
+	 if (con == null)
+	 {return "Error while connecting to the database for updating."; }
+	 // create a prepared statement
+	 String query = "UPDATE payments SET creditNumber=?,cvv=?,expireDate=?,date=?,amount=? WHERE NIC=?";
+	 PreparedStatement preparedStmt = con.prepareStatement(query);
+	 // binding values
+	 preparedStmt.setString(1, creditNumber);
+	 preparedStmt.setString(2, cvv);
+	 preparedStmt.setString(3, expireDate);
+	 preparedStmt.setString(4, date);
+	 preparedStmt.setDouble(5, Double.parseDouble(amount));
+	 
+	 preparedStmt.setString(6, NIC);
+	 // execute the statement
+	 preparedStmt.execute();
+	 con.close();
+	 output = "Updated successfully";
+	 }
+	 catch (Exception e)
+	 {
+	 output = "Error while updating the item.";
+	 System.err.println(e.getMessage());
+	 }
+	 return output;
+	 }
 }
 	
 	 

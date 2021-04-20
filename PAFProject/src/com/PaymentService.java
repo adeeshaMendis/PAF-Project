@@ -38,7 +38,7 @@ public class PaymentService
  	  }
  	 
  	 
- 	/* @PUT
+ 	@PUT
  	 @Path("/")
  	 @Consumes(MediaType.APPLICATION_JSON)
  	 @Produces(MediaType.TEXT_PLAIN)
@@ -56,6 +56,6 @@ public class PaymentService
  		  String amount = itemObject.get("amount").getAsString();
  		  String output = payment.updatePayment(paymentID, NIC, creditNumber, cvv, expireDate,date,amount);
  		 return output;
- 	 }*/
+ 	 }
 
 }	 
