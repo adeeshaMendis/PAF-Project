@@ -9,6 +9,9 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+
+
+
 public class Payment {
 	
 	private Connection connect()
@@ -38,6 +41,8 @@ public class Payment {
 			
 			
 			
+			
+			
 		}catch(Exception e) {
 			return false;
 		}
@@ -45,13 +50,14 @@ public class Payment {
 		
 		
 	}
-
-
+	
+	
 	public String insertPayment(String NIC, String creditNumber, String cvv, String expireDate,String date,String amount) {
 		String output = "";
 		try
 		 {
 		 Connection con = connect();
+		 
 		 
 		 
 		 if (con == null)
@@ -64,8 +70,7 @@ public class Payment {
 				 String selectQuery = "SELECT * FROM payments WHERE creditNumber = '"+creditNumber+"'";
 				 
 				 ResultSet rs = stmt.executeQuery(selectQuery);
-				 
-				 if(rs.next()) {
+				  if(rs.next()) {
 					 return "Already registerd same credit card number";
 				 }else if(NIC.equals("") || creditNumber.equals("") || cvv.equals("") || expireDate.equals("") || date.equals("") || amount.equals("")){
 					 return "Please fill all the details";
@@ -77,8 +82,10 @@ public class Payment {
 					 return "credit card number should be 12 digits";
 				 }else if(cvv.length() !=4) {
 					 return "cvv should be 4 digits";
+				 }else if(expireDate.compareTo(date)<0) {
+					 return "Expire date should be greater than today date";
 				 }
-				 else {
+				 else  {
 					 // create a prepared statement
 					 String query = " insert into payments(paymentID,NIC,creditNumber,cvv,expireDate,date,amount)"
 					 + " values (?, ?, ?, ?, ?, ?, ?)";
@@ -100,17 +107,24 @@ public class Payment {
 		 }catch(Exception e) {
 			 
 		 }
+			 
+		 
+		 
 		 }
-		 }
-		 catch (Exception e)
-		 {
-		 output = "error while inserting data";
-		 System.err.println(e.getMessage());
-		 }
-		return output;
-	
+		 
+		 
+		 
+		
+		 
+		
+	}catch(Exception e) {
 		
 	}
+		return output;
+ }
+		
+		 	
+	
 	public String readPayment(String NIC)
 	 {
 	 String output = "";
@@ -176,6 +190,8 @@ public class Payment {
 	 try
 	 {
 	 Connection con = connect();
+	 
+	 
 	 if (con == null)
 	 {return "Error while connecting to the database for updating."; }
 	 // create a prepared statement
@@ -185,7 +201,10 @@ public class Payment {
 		 return "expire Date should be 'dd-MM-YYYY'";
 	 }else if(valDate(date) == false) {
 		 return "date should be 'dd-MM-yyyy'";
+	 }else if(expireDate.compareTo(date)<0) {
+		 return "Expire date should be greater than today date";
 	 }
+	 else {
 	 String query = "UPDATE payments SET creditNumber=?,cvv=?,expireDate=?,date=?,amount=? WHERE NIC=?";
 	 PreparedStatement preparedStmt = con.prepareStatement(query);
 	 // binding values
@@ -200,6 +219,7 @@ public class Payment {
 	 preparedStmt.execute();
 	 con.close();
 	 output = "Updated successfully";
+	 }
 	 }
 	 catch (Exception e)
 	 {
