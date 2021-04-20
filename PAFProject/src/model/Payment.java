@@ -179,6 +179,13 @@ public class Payment {
 	 if (con == null)
 	 {return "Error while connecting to the database for updating."; }
 	 // create a prepared statement
+	 else if(NIC.equals("") || creditNumber.equals("") || cvv.equals("") || expireDate.equals("") || date.equals("") || amount.equals("")) {
+		 return "please fill all the fields";
+	 }else if(valDate(expireDate) == false) {
+		 return "expire Date should be 'dd-MM-YYYY'";
+	 }else if(valDate(date) == false) {
+		 return "date should be 'dd-MM-yyyy'";
+	 }
 	 String query = "UPDATE payments SET creditNumber=?,cvv=?,expireDate=?,date=?,amount=? WHERE NIC=?";
 	 PreparedStatement preparedStmt = con.prepareStatement(query);
 	 // binding values
@@ -201,6 +208,8 @@ public class Payment {
 	 }
 	 return output;
 	 }
+	
+	
 }
 	
 	 
