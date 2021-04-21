@@ -36,7 +36,8 @@ public class PaymentService
  	  {
  	  return payment.readPayment(NIC);
  	  }
- 	 
+ 	
+ 	
  	 
  	@PUT
  	 @Path("/")
@@ -72,6 +73,19 @@ public class PaymentService
  		  String output = payment.deletePayment(NIC);
  		 return output;
  	 }
+ 	
+ 	/*@POST
+	 @Path("/")
+	 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	 @Produces(MediaType.TEXT_PLAIN)
+	 public String insertTotal(@FormParam("NIC") String NIC,
+		  @FormParam("FromDate") String FromDate,
+		  @FormParam("ToDate") String ToDate)
+		  
+		 {
+		  String output = payment.insertTotalPayment(NIC,FromDate,ToDate);
+		 return output;
+	 }*/
 
 
 }	 

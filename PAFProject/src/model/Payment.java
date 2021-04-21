@@ -50,6 +50,27 @@ public class Payment {
 		
 		
 	}
+	public static boolean validateNIC(String NIC) {
+		//check if length is 10
+		int length = NIC.length();
+		if(length != 10) {
+			return false;
+		}
+		
+		//check last character for v
+		char lastChar = NIC.charAt(length-1);
+		if(lastChar != 'V' || lastChar != 'v') {
+			return false;
+		}
+		//check first 9 characters are digits
+		for(int i=0;i<length-2;i++) {
+			char currentChar = NIC.charAt(i);
+			if(currentChar<'0' || '9' <currentChar) {
+				return false;
+			}
+		}
+		return true;
+	}
 	
 	
 	public String insertPayment(String NIC, String creditNumber, String cvv, String expireDate,String date,String amount) {
@@ -66,13 +87,8 @@ public class Payment {
 			 try {
 				 
 				 
-				 Statement stmt = con.createStatement();
-				 String selectQuery = "SELECT * FROM payments WHERE creditNumber = '"+creditNumber+"'";
 				 
-				 ResultSet rs = stmt.executeQuery(selectQuery);
-				  if(rs.next()) {
-					 return "Already registerd same credit card number";
-				 }else if(NIC.equals("") || creditNumber.equals("") || cvv.equals("") || expireDate.equals("") || date.equals("") || amount.equals("")){
+				 if(NIC.equals("") || creditNumber.equals("") || cvv.equals("") || expireDate.equals("") || date.equals("") || amount.equals("")){
 					 return "Please fill all the details";
 				 }else if(valDate(expireDate) ==false){
 					 return "Expire Date should be 'dd-MM-yyyy' in format";
@@ -142,7 +158,7 @@ public class Payment {
 	 "<th>Amount</th>" +
 	 "<th>Update</th><th>Remove</th></tr>";
 
-	 String query = "select * from payments where NIC = '"+NIC+"'";
+	 String query = "select * from payments where NIC = '"+NIC+"'  ";
 	 Statement stmt = con.createStatement();
 	 ResultSet rs = stmt.executeQuery(query);
 	 // iterate through the rows in the result set
@@ -254,7 +270,10 @@ public class Payment {
 	 }
 	 return output;
 	 }
-}
+	
+	
+	}
+	
 	
 	 
 
