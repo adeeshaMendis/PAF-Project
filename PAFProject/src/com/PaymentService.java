@@ -13,7 +13,7 @@ import org.jsoup.nodes.Document;
 public class PaymentService
 {
  	Payment payment = new Payment();
- 	
+ 	//insert part
  	 @POST
  	 @Path("/")
  	 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -28,7 +28,7 @@ public class PaymentService
  		  String output = payment.insertPayment(NIC,creditNumber,cvv,expireDate,date,amount);
  		 return output;
  	 }
- 	 
+ 	 //read part
  	@GET
  	 @Path("/{NIC}")
  	 @Produces(MediaType.TEXT_HTML)
@@ -36,8 +36,9 @@ public class PaymentService
  	  {
  	  return payment.readPayment(NIC);
  	  }
- 	 
- 	 
+ 	
+ 	
+ 	 //update part
  	@PUT
  	 @Path("/")
  	 @Consumes(MediaType.APPLICATION_JSON)
@@ -57,7 +58,7 @@ public class PaymentService
  		  String output = payment.updatePayment(paymentID, NIC, creditNumber, cvv, expireDate,date,amount);
  		 return output;
  	 }
- 	
+ 	//delete part
  	@DELETE
  	 @Path("/")
  	 @Consumes(MediaType.APPLICATION_XML)
@@ -72,6 +73,19 @@ public class PaymentService
  		  String output = payment.deletePayment(NIC);
  		 return output;
  	 }
+ 	
+ 	/*@POST
+	 @Path("/")
+	 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	 @Produces(MediaType.TEXT_PLAIN)
+	 public String insertTotal(@FormParam("NIC") String NIC,
+		  @FormParam("FromDate") String FromDate,
+		  @FormParam("ToDate") String ToDate)
+		  
+		 {
+		  String output = payment.insertTotalPayment(NIC,FromDate,ToDate);
+		 return output;
+	 }*/
 
 
 }	 

@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 
 
 public class Payment {
-	
+	//create connection method
 	private Connection connect()
 	 {
 	 Connection con = null;
@@ -28,6 +28,7 @@ public class Payment {
 	 {e.printStackTrace();}
 	 return con;
 }
+	//validate the date format,it should be dd-MM-yyyy
 	public static boolean valDate(String date) {
 		DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 		
@@ -50,12 +51,34 @@ public class Payment {
 		
 		
 	}
+	public static boolean validateNIC(String NIC) {
+		//check if length is 10
+		int length = NIC.length();
+		if(length != 10) {
+			return false;
+		}
+		
+		//check last character for v
+		char lastChar = NIC.charAt(length-1);
+		if(lastChar != 'V' || lastChar != 'v') {
+			return false;
+		}
+		//check first 9 characters are digits
+		for(int i=0;i<length-2;i++) {
+			char currentChar = NIC.charAt(i);
+			if(currentChar<'0' || '9' <currentChar) {
+				return false;
+			}
+		}
+		return true;
+	}
 	
-	
+	//insert method
 	public String insertPayment(String NIC, String creditNumber, String cvv, String expireDate,String date,String amount) {
 		String output = "";
 		try
 		 {
+			//check connection
 		 Connection con = connect();
 		 
 		 
@@ -65,23 +88,27 @@ public class Payment {
 		 else {
 			 try {
 				 
-				 
-				 Statement stmt = con.createStatement();
-				 String selectQuery = "SELECT * FROM payments WHERE creditNumber = '"+creditNumber+"'";
-				 
-				 ResultSet rs = stmt.executeQuery(selectQuery);
-				  if(rs.next()) {
-					 return "Already registerd same credit card number";
-				 }else if(NIC.equals("") || creditNumber.equals("") || cvv.equals("") || expireDate.equals("") || date.equals("") || amount.equals("")){
+				 //check values are empyt or not
+				 if(NIC.equals("") || creditNumber.equals("") || cvv.equals("") || expireDate.equals("") || date.equals("") || amount.equals("")){
 					 return "Please fill all the details";
+					 
+				//check expire date format
 				 }else if(valDate(expireDate) ==false){
 					 return "Expire Date should be 'dd-MM-yyyy' in format";
+					 
+				//check today date 	 
 				 }else if(valDate(date)== false){
 					 return "date should be 'dd-MM-yyyy' in format";
+					 
+				//check credit number equals to 12
 				 }else if(creditNumber.length()!=12) {
 					 return "credit card number should be 12 digits";
+				//check cvv is equals to 4
+					 
 				 }else if(cvv.length() !=4) {
 					 return "cvv should be 4 digits";
+					 
+				//check expire date greater than today date
 				 }else if(expireDate.compareTo(date)<0) {
 					 return "Expire date should be greater than today date";
 				 }
@@ -130,50 +157,51 @@ public class Payment {
 	 String output = "";
 	 try
 	 {
-	 Connection con = connect();
-	 if (con == null)
-	 {return "Error while connecting to the database for reading."; }
-	 // Prepare the html table to be displayed
-	 output = "<table border='1'><tr><th>Payment ID</th><th>NIC</th>" +
-	 "<th>Credit Number</th>" +
-	 "<th>Cvv</th>" +
-	 "<th>Expire Date</th>" +
-	 "<th>Date</th>" +
-	 "<th>Amount</th>" +
-	 "<th>Update</th><th>Remove</th></tr>";
-
-	 String query = "select * from payments where NIC = '"+NIC+"'";
-	 Statement stmt = con.createStatement();
-	 ResultSet rs = stmt.executeQuery(query);
-	 // iterate through the rows in the result set
-	 while (rs.next())
-	 {
-	 String paymentID = Integer.toString(rs.getInt("paymentID"));
-	 String UserNIC = rs.getString("NIC");
-	 String creditNumber = rs.getString("creditNumber");
-	 String cvv = rs.getString("cvv");
-	 String expireDate = rs.getString("expireDate");
-	 String date = rs.getString("date");
-	 String amount = Double.toString(rs.getDouble("amount"));
-	 
-	 // Add into the html table
-	 output += "<tr><td>" + paymentID + "</td>";
-	 output += "<td>" + UserNIC + "</td>";
-	 output += "<td>" + creditNumber + "</td>";
-	 output += "<td>" + cvv + "</td>";
-	 output += "<td>" + expireDate + "</td>";
-	 output += "<td>" + date + "</td>";
-	 output += "<td>" + amount + "</td>";
-	 // buttons
-	 output += "<td><input name='btnUpdate' type='button' value='Update' class='btn btn-secondary'></td>"
-	 + "<td><form method='post' action='payments.jsp'>"
-	 + "<input name='btnRemove' type='submit' value='Remove'class='btn btn-danger'>"
-	 + "<input name='itemID' type='hidden' value='" + paymentID
-	 + "'>" + "</form></td></tr>";
-	 }
-	 con.close();
-	 // Complete the html table
-	 output += "</table>";
+		 Connection con = connect();
+		 if (con == null)
+		 {return "Error while connecting to the database for reading."; }
+		 
+		 // Prepare the html table to be displayed
+		 output = "<table border='1'><tr><th>Payment ID</th><th>NIC</th>" +
+		 "<th>Credit Number</th>" +
+		 "<th>Cvv</th>" +
+		 "<th>Expire Date</th>" +
+		 "<th>Date</th>" +
+		 "<th>Amount</th>" +
+		 "<th>Update</th><th>Remove</th></tr>";
+	
+		 String query = "select * from payments where NIC = '"+NIC+"'  ";
+		 Statement stmt = con.createStatement();
+		 ResultSet rs = stmt.executeQuery(query);
+		 // iterate through the rows in the result set
+		 while (rs.next())
+		 {
+		 String paymentID = Integer.toString(rs.getInt("paymentID"));
+		 String UserNIC = rs.getString("NIC");
+		 String creditNumber = rs.getString("creditNumber");
+		 String cvv = rs.getString("cvv");
+		 String expireDate = rs.getString("expireDate");
+		 String date = rs.getString("date");
+		 String amount = Double.toString(rs.getDouble("amount"));
+		 
+		 // Add into the html table
+		 output += "<tr><td>" + paymentID + "</td>";
+		 output += "<td>" + UserNIC + "</td>";
+		 output += "<td>" + creditNumber + "</td>";
+		 output += "<td>" + cvv + "</td>";
+		 output += "<td>" + expireDate + "</td>";
+		 output += "<td>" + date + "</td>";
+		 output += "<td>" + amount + "</td>";
+		 // buttons
+		 output += "<td><input name='btnUpdate' type='button' value='Update' class='btn btn-secondary'></td>"
+		 + "<td><form method='post' action='payments.jsp'>"
+		 + "<input name='btnRemove' type='submit' value='Remove'class='btn btn-danger'>"
+		 + "<input name='itemID' type='hidden' value='" + paymentID
+		 + "'>" + "</form></td></tr>";
+		 }
+		 con.close();
+		 // Complete the html table
+		 output += "</table>";
 	 }
 	 catch (Exception e)
 	 {
@@ -195,12 +223,21 @@ public class Payment {
 	 if (con == null)
 	 {return "Error while connecting to the database for updating."; }
 	 // create a prepared statement
+	 
+	 //check validations
+	 //check empty fielda
 	 else if(NIC.equals("") || creditNumber.equals("") || cvv.equals("") || expireDate.equals("") || date.equals("") || amount.equals("")) {
 		 return "please fill all the fields";
+		 
+		 //check date format
 	 }else if(valDate(expireDate) == false) {
 		 return "expire Date should be 'dd-MM-YYYY'";
+		 
+		 //check date format
 	 }else if(valDate(date) == false) {
 		 return "date should be 'dd-MM-yyyy'";
+		 
+		 //compare with expire date with today date
 	 }else if(expireDate.compareTo(date)<0) {
 		 return "Expire date should be greater than today date";
 	 }
@@ -254,7 +291,10 @@ public class Payment {
 	 }
 	 return output;
 	 }
-}
+	
+	
+	}
+	
 	
 	 
 
