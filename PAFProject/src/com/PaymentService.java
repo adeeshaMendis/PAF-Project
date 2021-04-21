@@ -51,12 +51,13 @@ public class PaymentService
  		 //Read the values from the JSON object
  		  String paymentID = itemObject.get("paymentID").getAsString();
  		  String NIC = itemObject.get("NIC").getAsString();
+ 		 String productID = itemObject.get("productID").getAsString();
  		  String creditNumber = itemObject.get("creditNumber").getAsString();
  		  String cvv = itemObject.get("cvv").getAsString();
  		  String expireDate = itemObject.get("expireDate").getAsString();
  		  String date = itemObject.get("date").getAsString();
  		  String amount = itemObject.get("amount").getAsString();
- 		  String output = payment.updatePayment(paymentID, NIC, creditNumber, cvv, expireDate,date,amount);
+ 		  String output = payment.updatePayment(paymentID, NIC,productID, creditNumber, cvv, expireDate,date,amount);
  		 return output;
  	 }
  	//delete part

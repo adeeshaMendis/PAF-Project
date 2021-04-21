@@ -214,7 +214,7 @@ public class Payment {
 	 return output;
 	 }
 	
-	public String updatePayment(String paymentID, String NIC, String creditNumber, String cvv, String expireDate,String date,String amount)
+	public String updatePayment(String paymentID, String NIC,String productID, String creditNumber, String cvv, String expireDate,String date,String amount)
 
 	 {
 	 String output = "";
@@ -228,10 +228,17 @@ public class Payment {
 	 // create a prepared statement
 	 
 	 //check validations
-	 //check empty fielda
-	 else if(NIC.equals("") || creditNumber.equals("") || cvv.equals("") || expireDate.equals("") || date.equals("") || amount.equals("")) {
+	 //check empty fields
+	 else if(NIC.equals("") ||productID.equals("")|| creditNumber.equals("") || cvv.equals("") || expireDate.equals("") || date.equals("") || amount.equals("")) {
 		 return "please fill all the fields";
 		 
+		 //check credit card number is 12 digits
+	 }else if(creditNumber.length()!=12) {
+		 return "credit card number should be 12 digits";
+		 
+		//check cvv is 4 digits
+	 }	else if(cvv.length()!=4) { 
+		 return "cvv should be 4 digits";
 		 //check date format
 	 }else if(valDate(expireDate) == false) {
 		 return "expire Date should be 'dd-MM-YYYY'";
@@ -245,16 +252,17 @@ public class Payment {
 		 return "Expire date should be greater than today date";
 	 }
 	 else {
-	 String query = "UPDATE payments SET creditNumber=?,cvv=?,expireDate=?,date=?,amount=? WHERE NIC=?";
+	 String query = "UPDATE payments SET productID=?,creditNumber=?,cvv=?,expireDate=?,date=?,amount=? WHERE NIC=?";
 	 PreparedStatement preparedStmt = con.prepareStatement(query);
 	 // binding values
-	 preparedStmt.setString(1, creditNumber);
-	 preparedStmt.setString(2, cvv);
-	 preparedStmt.setString(3, expireDate);
-	 preparedStmt.setString(4, date);
-	 preparedStmt.setDouble(5, Double.parseDouble(amount));
+	 preparedStmt.setInt(1, Integer.parseInt(productID));
+	 preparedStmt.setString(2, creditNumber);
+	 preparedStmt.setString(3, cvv);
+	 preparedStmt.setString(4, expireDate);
+	 preparedStmt.setString(5, date);
+	 preparedStmt.setDouble(6, Double.parseDouble(amount));
 	 
-	 preparedStmt.setString(6, NIC);
+	 preparedStmt.setString(7, NIC);
 	 // execute the statement
 	 preparedStmt.execute();
 	 con.close();
