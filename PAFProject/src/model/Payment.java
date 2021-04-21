@@ -74,7 +74,7 @@ public class Payment {
 	}
 	
 	//insert method
-	public String insertPayment(String NIC, String creditNumber, String cvv, String expireDate,String date,String amount) {
+	public String insertPayment(String NIC,String productID, String creditNumber, String cvv, String expireDate,String date,String amount) {
 		String output = "";
 		try
 		 {
@@ -89,9 +89,9 @@ public class Payment {
 			 try {
 				 
 				 //check values are empyt or not
-				 if(NIC.equals("") || creditNumber.equals("") || cvv.equals("") || expireDate.equals("") || date.equals("") || amount.equals("")){
+				 if(NIC.equals("")|| productID.equals("") || creditNumber.equals("") || cvv.equals("") || expireDate.equals("") || date.equals("") || amount.equals("")){
 					 return "Please fill all the details";
-					 
+				 
 				//check expire date format
 				 }else if(valDate(expireDate) ==false){
 					 return "Expire Date should be 'dd-MM-yyyy' in format";
@@ -114,17 +114,18 @@ public class Payment {
 				 }
 				 else  {
 					 // create a prepared statement
-					 String query = " insert into payments(paymentID,NIC,creditNumber,cvv,expireDate,date,amount)"
-					 + " values (?, ?, ?, ?, ?, ?, ?)";
+					 String query = " insert into payments(paymentID,NIC,productID,creditNumber,cvv,expireDate,date,amount)"
+					 + " values (?,?, ?, ?, ?, ?, ?, ?)";
 					 PreparedStatement preparedStmt = con.prepareStatement(query);
 					 // binding values
 					 preparedStmt.setInt(1, 0);
 					 preparedStmt.setString(2, NIC);
-					 preparedStmt.setString(3, creditNumber);
-					 preparedStmt.setString(4, cvv);
-					 preparedStmt.setString(5, expireDate);
-					 preparedStmt.setString(6, date);
-					 preparedStmt.setDouble(7, Double.parseDouble(amount));		 
+					 preparedStmt.setInt(3, Integer.parseInt(productID));
+					 preparedStmt.setString(4, creditNumber);
+					 preparedStmt.setString(5, cvv);
+					 preparedStmt.setString(6, expireDate);
+					 preparedStmt.setString(7, date);
+					 preparedStmt.setDouble(8, Double.parseDouble(amount));		 
 					// execute the statement
 			
 					 preparedStmt.execute();
