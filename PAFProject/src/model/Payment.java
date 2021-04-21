@@ -163,7 +163,7 @@ public class Payment {
 		 {return "Error while connecting to the database for reading."; }
 		 
 		 // Prepare the html table to be displayed
-		 output = "<table border='1'><tr><th>Payment ID</th><th>NIC</th>" +
+		 output = "<table border='1'><tr><th>Payment ID</th><th>NIC</th><th>ProductID</th>" +
 		 "<th>Credit Number</th>" +
 		 "<th>Cvv</th>" +
 		 "<th>Expire Date</th>" +
@@ -179,6 +179,7 @@ public class Payment {
 		 {
 		 String paymentID = Integer.toString(rs.getInt("paymentID"));
 		 String UserNIC = rs.getString("NIC");
+		 String productID = Integer.toString(rs.getInt("productID"));
 		 String creditNumber = rs.getString("creditNumber");
 		 String cvv = rs.getString("cvv");
 		 String expireDate = rs.getString("expireDate");
@@ -188,6 +189,7 @@ public class Payment {
 		 // Add into the html table
 		 output += "<tr><td>" + paymentID + "</td>";
 		 output += "<td>" + UserNIC + "</td>";
+		 output += "<td>" + productID + "</td>";
 		 output += "<td>" + creditNumber + "</td>";
 		 output += "<td>" + cvv + "</td>";
 		 output += "<td>" + expireDate + "</td>";
