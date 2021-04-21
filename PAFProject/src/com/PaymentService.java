@@ -19,13 +19,14 @@ public class PaymentService
  	 @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
  	 @Produces(MediaType.TEXT_PLAIN)
  	 public String insertItem(@FormParam("NIC") String NIC,
+ 			@FormParam("productID") String productID, 
  		  @FormParam("creditNumber") String creditNumber,
  		  @FormParam("cvv") String cvv,
  		  @FormParam("expireDate") String expireDate,
  		 @FormParam("date") String date,
  		 @FormParam("amount") String amount)
  		 {
- 		  String output = payment.insertPayment(NIC,creditNumber,cvv,expireDate,date,amount);
+ 		  String output = payment.insertPayment(NIC,productID,creditNumber,cvv,expireDate,date,amount);
  		 return output;
  	 }
  	 //read part
