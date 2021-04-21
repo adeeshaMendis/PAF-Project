@@ -22,6 +22,13 @@ public class ProductService {
 	public String readProducts(@PathParam("nic") String nic) {
 		return pobj.readProducts(nic);
 	}
+	
+	@GET
+	@Path("/")
+	@Produces(MediaType.TEXT_HTML)
+	public String readAllProducts() {
+		return pobj.readAllProducts();
+	}
 
 	@POST
 	@Path("/")
