@@ -22,7 +22,7 @@ public class Payment {
 	 Class.forName("com.mysql.jdbc.Driver");
 
 	 //Provide the correct details: DBServer/DBName, username, password
-	 con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/paf", "root", "");
+	 con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/payment", "root", "");
 	 }
 	 catch (Exception e)
 	 {e.printStackTrace();}
@@ -86,10 +86,10 @@ public class Payment {
 		 if (con == null)
 		 {return "Error while connecting to the database for inserting."; }
 		 else {
-			 try {
+			 
 				 
 				 //check values are empyt or not
-				 if(NIC.equals("")|| productID.equals("") || creditNumber.equals("") || cvv.equals("") || expireDate.equals("") || date.equals("") || amount.equals("")){
+				if(NIC.equals("")|| productID.equals("") || creditNumber.equals("") || cvv.equals("") || expireDate.equals("") || date.equals("") || amount.equals("")){
 					 return "Please fill all the details";
 				 
 				//check expire date format
@@ -132,13 +132,10 @@ public class Payment {
 					 con.close();
 					 output = "Inserted successfully";
 				 }
-		 }catch(Exception e) {
-			 
-		 }
-			 
+		  
 		 
 		 
-		 }
+		}
 		 
 		 
 		 
@@ -252,7 +249,7 @@ public class Payment {
 		 return "Expire date should be greater than today date";
 	 }
 	 else {
-	 String query = "UPDATE payments SET productID=?,creditNumber=?,cvv=?,expireDate=?,date=?,amount=? WHERE NIC=?";
+	 String query = "UPDATE payments SET productID=?,creditNumber=?,cvv=?,expireDate=?,date=?,amount=? WHERE paymentID=?";
 	 PreparedStatement preparedStmt = con.prepareStatement(query);
 	 // binding values
 	 preparedStmt.setInt(1, Integer.parseInt(productID));
@@ -262,7 +259,7 @@ public class Payment {
 	 preparedStmt.setString(5, date);
 	 preparedStmt.setDouble(6, Double.parseDouble(amount));
 	 
-	 preparedStmt.setString(7, NIC);
+	 preparedStmt.setInt(7, Integer.parseInt(paymentID));
 	 // execute the statement
 	 preparedStmt.execute();
 	 con.close();
@@ -277,7 +274,7 @@ public class Payment {
 	 return output;
 	 }
 	
-	public String deletePayment(String NIC)
+	public String deletePayment(String paymentID)
 	 {
 	 String output = "";
 	 try
@@ -286,10 +283,10 @@ public class Payment {
 	 if (con == null)
 	 {return "Error while connecting to the database for deleting."; }
 	 // create a prepared statement
-	 String query = "delete from payments where NIC=?";
+	 String query = "delete from payments where paymentID=?";
 	 PreparedStatement preparedStmt = con.prepareStatement(query);
 	 // binding values
-	 preparedStmt.setString(1, NIC);
+	 preparedStmt.setInt(1, Integer.parseInt(paymentID));
 	 // execute the statement
 	 preparedStmt.execute();
 	 con.close();

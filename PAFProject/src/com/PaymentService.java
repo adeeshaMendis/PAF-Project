@@ -65,14 +65,14 @@ public class PaymentService
  	 @Path("/")
  	 @Consumes(MediaType.APPLICATION_XML)
  	 @Produces(MediaType.TEXT_PLAIN)
- 	 public String deleteItem(String itemData)
+ 	 public String deleteItem(String paymentData)
  	 {
  		 //Convert the input string to an XML document
- 		  Document doc = Jsoup.parse(itemData, "", Parser.xmlParser());
+ 		  Document doc = Jsoup.parse(paymentData, "", Parser.xmlParser());
  		
  		 //Read the value from the element <itemID>
- 		  String NIC = doc.select("NIC").text();
- 		  String output = payment.deletePayment(NIC);
+ 		  String paymentID = doc.select("paymentID").text();
+ 		  String output = payment.deletePayment(paymentID);
  		 return output;
  	 }
  	
