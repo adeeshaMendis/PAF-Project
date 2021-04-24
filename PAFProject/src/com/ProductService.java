@@ -5,6 +5,8 @@ import javax.ws.rs.core.MediaType;
 import org.jsoup.Jsoup;
 
 import com.google.gson.*;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.WebResource;
 
 import model.Product;
  
@@ -15,7 +17,10 @@ import org.jsoup.nodes.Document;
 public class ProductService {
 
 	Product pobj = new Product();
-
+//	Client client = Client.create();
+//	WebResource webResource = client.resource("http://localhost:8085/PAFProject/ProductService/products");
+//	String output = webResource.get(String.class);
+	
 	@GET
 	@Path("/{nic}")
 	@Produces(MediaType.TEXT_HTML)
