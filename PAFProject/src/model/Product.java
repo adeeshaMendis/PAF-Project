@@ -50,10 +50,13 @@ public class Product {
 				output="Please Fill the required feilds.";
 			}
 			else if(!validateNIC(nic)) {
-				output = "Please check the NIC again.";
+				output = "Please check the NIC again.Follow the format.Ex:123456789V";
 			}
 			else if(!validateProductCode(pcode)) {
 				output = "Please check the product code.";
+			}
+			else if(!validateversion(pversion)) {
+				output = "Please check the format. Ex:'2020-01'";
 			}
 			else {
 			
@@ -113,6 +116,16 @@ public class Product {
 
 	    return true;
 	}
+	
+	public static boolean validateversion(String version) {
+
+		if(!version.matches("\\d{4}-\\d{2}")) {
+			return false;
+		}
+		
+		return true;
+	}
+
 
 	public String readProducts(String nic) {
 		
@@ -262,6 +275,9 @@ public class Product {
 			
 			else if(!validateProductCode(pcode)) {
 				output = "Please check the product code.";
+			}
+			else if(!validateversion(pversion)) {
+				output = "Please check the format. Ex:'2020-01'";
 			}
 			else {
 				prepStatement.execute();
