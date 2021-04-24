@@ -15,7 +15,7 @@ public class Product {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 
 			// Provide the correct details: DBServer/DBName, username, password
-			con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/pafproject?useServerPrepStmts=true&tinyInt1isBit=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC", "root", "");
+			con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/productservice?useServerPrepStmts=true&tinyInt1isBit=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC", "root", "");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -134,7 +134,8 @@ public class Product {
 		 		    + "<th>Product Name</th>" 
 		            +"<th>Product Version</th>"
 		            + "<th>Description</th>"
-		            +"<th>Amount</th></tr>";
+		            +"<th>Amount</th>"
+		            + "<th>Update</th><th>Remove</th></tr>";
 		             
 		 
 		 String query = "SELECT * FROM products WHERE NIC= '"+nic+"'"; 
@@ -155,8 +156,12 @@ public class Product {
 			 output += "<td>" + productName + "</td>"; 
 			 output += "<td>" +version + "</td>"; 
 			 output += "<td>" + description + "</td>"; 
-			 output += "<td>" + price + "</td></tr>"; 
-			 
+			 output += "<td>" + price + "</td>"; 
+			 output += "<td><input name='btnUpdate' type='button' value='Update'  class='btn btn-secondary'></td>"
+					 + "<td><form method='post' action='items.jsp'>"
+					 + "<input name='btnRemove' type='submit' value='Remove' class='btn btn-danger'>"
+					 + "<input name='itemID' type='hidden' value='" + productID 
+					 + "'>" + "</form></td></tr>"; 
 			
 		 } 
 		 con.close(); 
@@ -251,10 +256,18 @@ public class Product {
 			prepStatement.setString(4, desc);
 			prepStatement.setDouble(5, Double.parseDouble(price));
 			
-			prepStatement.execute();
-			con.close();
-			output="Updated Successfully.";
+			if(pcode.equals("")||pname.equals("")||pversion.equals("")||desc.equals("")||price.equals("")) {
+				output="Please Fill the required feilds.";
+			}
 			
+			else if(!validateProductCode(pcode)) {
+				output = "Please check the product code.";
+			}
+			else {
+				prepStatement.execute();
+				con.close();
+				output="Updated Successfully.";
+			}
 		}catch(Exception e) {
 			output="Error while updating the item.";
 			System.out.println(e.getMessage());
