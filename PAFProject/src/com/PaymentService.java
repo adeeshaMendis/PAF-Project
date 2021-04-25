@@ -38,6 +38,7 @@ public class PaymentService
  	  return payment.readPayment(NIC);
  	  }
  	
+ 	//get total amount according to the NIC
  	@GET
 	 @Path("/total/{NIC}")
 	 @Produces(MediaType.TEXT_HTML)
@@ -46,6 +47,7 @@ public class PaymentService
 	  return payment.readTotalPayment(NIC);
 	  }
  	
+ 	//get total amount according to the productID
  	@GET
 	 @Path("/total/product/{productID}")
 	 @Produces(MediaType.TEXT_HTML)
