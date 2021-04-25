@@ -38,25 +38,41 @@ public class PaymentService
  	  return payment.readPayment(NIC);
  	  }
  	
+ 	@GET
+	 @Path("/total/{NIC}")
+	 @Produces(MediaType.TEXT_HTML)
+	 public String readItems1(@PathParam("NIC") String NIC)
+	  {
+	  return payment.readTotalPayment(NIC);
+	  }
+ 	
+ 	@GET
+	 @Path("/total/product/{productID}")
+	 @Produces(MediaType.TEXT_HTML)
+	 public String readItems2(@PathParam("productID") String productID)
+	  {
+	  return payment.readTotalPaymentForProduct(productID);
+	  }
+ 	
  	
  	 //update part
  	@PUT
  	 @Path("/")
  	 @Consumes(MediaType.APPLICATION_JSON)
  	 @Produces(MediaType.TEXT_PLAIN)
- 	 public String updateItem(String itemData)
+ 	 public String updateItem(String paymentData)
  	 {
  		 //Convert the input string to a JSON object
- 		  JsonObject itemObject = new JsonParser().parse(itemData).getAsJsonObject();
+ 		  JsonObject paymentObject = new JsonParser().parse(paymentData).getAsJsonObject();
  		 //Read the values from the JSON object
- 		  String paymentID = itemObject.get("paymentID").getAsString();
- 		  String NIC = itemObject.get("NIC").getAsString();
- 		 String productID = itemObject.get("productID").getAsString();
- 		  String creditNumber = itemObject.get("creditNumber").getAsString();
- 		  String cvv = itemObject.get("cvv").getAsString();
- 		  String expireDate = itemObject.get("expireDate").getAsString();
- 		  String date = itemObject.get("date").getAsString();
- 		  String amount = itemObject.get("amount").getAsString();
+ 		  String paymentID = paymentObject.get("paymentID").getAsString();
+ 		  String NIC = paymentObject.get("NIC").getAsString();
+ 		 String productID = paymentObject.get("productID").getAsString();
+ 		  String creditNumber = paymentObject.get("creditNumber").getAsString();
+ 		  String cvv = paymentObject.get("cvv").getAsString();
+ 		  String expireDate = paymentObject.get("expireDate").getAsString();
+ 		  String date = paymentObject.get("date").getAsString();
+ 		  String amount = paymentObject.get("amount").getAsString();
  		  String output = payment.updatePayment(paymentID, NIC,productID, creditNumber, cvv, expireDate,date,amount);
  		 return output;
  	 }
@@ -70,7 +86,7 @@ public class PaymentService
  		 //Convert the input string to an XML document
  		  Document doc = Jsoup.parse(paymentData, "", Parser.xmlParser());
  		
- 		 //Read the value from the element <itemID>
+ 		 //Read the value from the element <paymentID>
  		  String paymentID = doc.select("paymentID").text();
  		  String output = payment.deletePayment(paymentID);
  		 return output;
@@ -88,6 +104,7 @@ public class PaymentService
 		  String output = payment.insertTotalPayment(NIC,FromDate,ToDate);
 		 return output;
 	 }*/
-
+ 	
+ 	 
 
 }	 
