@@ -103,20 +103,14 @@ public class ReviewService {
 	 }
  	
  	@GET
-	 @Path("reviews/{NIC}")
+	 @Path("reviews/{value}")
 	 @Produces(MediaType.TEXT_HTML)
-	 public String readItems1(@PathParam("NIC") String NIC)
+	 public String readItems1(@PathParam("value") String value)
 	  {
-	  return review.readUserReview(NIC);
+ 		if ( value.endsWith("v") ||  value.endsWith("V"))
+ 				return review.readUserReview(value);
+ 		else
+ 			  return review.readProudctReview(value);
 	  }
-	/*
- 	@GET
-	 @Path("reviews/{productID}")
-	 @Produces(MediaType.TEXT_HTML)
-	 public String readItems2(@PathParam("productID") String productID)
-	  {
-	  return review.readProudctReview(productID);
-	  }
-	
- 	*/
+	 	
 }
