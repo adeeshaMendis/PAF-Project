@@ -42,9 +42,9 @@ public class Review {
 				}
 				
 				//check review description limit
-				else if ( reviewDesc.length() > 200 )
+				else if ( reviewDesc.length() > 500 )
 				{
-					return "Words exceeded. Maximum words for a description is 200";
+					return "Words exceeded. Maximum words for a description is 500";
 				}
 				
 				//check ratings between 1-5
@@ -68,7 +68,7 @@ public class Review {
 			
 					 preparedStmt.execute();
 					 con.close();
-					 output = "Inserted successfully";
+					 output = "Review added successfully";
 				 }
 		  		 		 
 		}
@@ -146,11 +146,10 @@ public class Review {
 	 
 	 //check validations
 	 //check empty fields
-	 else if(reviewType.equals("") ||reviewDesc.equals("")|| reviewValue.equals("")) {
-		 return "please fill all the fields";
+	 else if(reviewType.equals("") || reviewValue.equals("")) {
+		 return "please add a rating";
+	 } 
 		 
-		 //check credit card number is 12 digits
-	 }
 	 else {
 	 String query = "UPDATE reviews SET reviewType=?,reviewDesc=?,reviewValue=? WHERE reviewID=?";
 	 PreparedStatement preparedStmt = con.prepareStatement(query);
